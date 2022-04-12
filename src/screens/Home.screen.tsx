@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import MoodPicker from '../components/MoodPicker';
 
 const Home: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <MoodPicker />
     </View>
   );
 };
