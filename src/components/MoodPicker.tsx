@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { theme } from '../theme';
 import { MoodOptionType } from '../types';
 
 const moodOptions: MoodOptionType[] = [
@@ -14,34 +15,42 @@ const MoodPicker: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<MoodOptionType>();
   return (
     <View style={styles.moodList}>
-      {moodOptions.map((option) => (
-        <View>
-          <Pressable
-            key={option.description}
-            onPress={() => setSelectedMood(option)}
-            style={[
-              styles.moodItem,
-              option.emoji === selectedMood?.emoji
-                ? styles.selectedMoodItem
-                : undefined,
-            ]}>
-            <Text style={styles.moodText}>{option.emoji}</Text>
-          </Pressable>
-          <Text style={styles.descriptionText}>
-            {selectedMood?.emoji === option.emoji ? option.description : ' '}
-          </Text>
+      <View style={styles.container}>
+        <Text style={styles.heading}>How are you right now?</Text>
+        <View style={styles.moodList}>
+          {moodOptions.map((option) => (
+            <View>
+              <Pressable
+                onPress={() => setSelectedMood(option)}
+                key={option.emoji}
+                style={[
+                  styles.moodItem,
+                  option.emoji === selectedMood?.emoji
+                    ? styles.selectedMoodItem
+                    : undefined,
+                ]}>
+                <Text style={styles.moodText}>{option.emoji}</Text>
+              </Pressable>
+              <Text style={styles.descriptionText}>
+                {selectedMood?.emoji === option.emoji
+                  ? option.description
+                  : ' '}
+              </Text>
+            </View>
+          ))}
         </View>
-      ))}
+        <Pressable style={styles.button}>
+          <Text style={styles.buttonText}>Choose</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   moodList: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
   },
   moodItem: {
     width: 60,
@@ -53,17 +62,44 @@ const styles = StyleSheet.create({
   },
   selectedMoodItem: {
     borderWidth: 2,
-    backgroundColor: '#454C73',
-    borderColor: '#fff',
+    backgroundColor: theme.colorPurple,
+    borderColor: theme.colorWhite,
   },
   moodText: {
     fontSize: 24,
   },
   descriptionText: {
-    color: '#454C73',
+    color: theme.colorPurple,
     fontWeight: 'bold',
     fontSize: 10,
     textAlign: 'center',
+  },
+  container: {
+    borderWidth: 2,
+    borderColor: theme.colorPurple,
+    margin: 10,
+    borderRadius: 10,
+    padding: 20,
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    letterSpacing: 1,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: theme.colorPurple,
+    width: 150,
+    borderRadius: 20,
+    marginTop: 20,
+    alignSelf: 'center',
+    padding: 10,
+  },
+  buttonText: {
+    color: theme.colorWhite,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
