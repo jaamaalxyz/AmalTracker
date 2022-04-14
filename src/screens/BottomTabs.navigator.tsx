@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Text } from 'react-native';
-import { HistoryIcon, HomeIcon } from '../components/Icons';
+import { ChartIcon, HistoryIcon, HomeIcon } from '../components/Icons';
 import { theme } from '../theme';
 import Analytics from './Analytics.screen';
 import History from './History.screen';
@@ -26,7 +25,7 @@ const BottomTabsNavigator: React.FC = () => {
           }
 
           if (route.name === 'Analytics') {
-            return <Text>Analytics</Text>;
+            return <ChartIcon color={color} size={size} />;
           }
 
           return null;
