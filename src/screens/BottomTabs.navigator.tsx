@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Text } from 'react-native';
-import { HomeIcon } from '../components/Icons';
+import { HistoryIcon, HomeIcon } from '../components/Icons';
 import { theme } from '../theme';
 import Analytics from './Analytics.screen';
 import History from './History.screen';
@@ -22,7 +22,7 @@ const BottomTabsNavigator: React.FC = () => {
           }
 
           if (route.name === 'History') {
-            return <Text>History</Text>;
+            return <HistoryIcon color={color} size={size} />;
           }
 
           if (route.name === 'Analytics') {
