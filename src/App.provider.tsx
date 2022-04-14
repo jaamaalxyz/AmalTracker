@@ -1,72 +1,89 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React from 'react';
 import { MoodOptionType, MoodOptionTypeWithTimestamp } from './types';
 
-const storageKey = 'heavy-kothin-secret-keys';
+const storageKey = 'my-app-data';
 
-interface AppData {
+type AppData = {
   moods: MoodOptionTypeWithTimestamp[];
-}
+};
 
 const getAppData = async (): Promise<AppData | null> => {
   try {
     const data = await AsyncStorage.getItem(storageKey);
-    if (data) return JSON.parse(data);
+
+    if (data) {
+      return JSON.parse(data);
+    }
     return null;
   } catch {
     return null;
   }
 };
 
-const setAppData = async (newData: AppData): Promise<void> => {
+const setAppData = async (newData: AppData) => {
   try {
     await AsyncStorage.setItem(storageKey, JSON.stringify(newData));
   } catch {}
 };
 
-interface AppContextType {
+type AppContextType = {
   moodList: MoodOptionTypeWithTimestamp[];
   handleSelectMood: (mood: MoodOptionType) => void;
-}
+  handleDeleteMood: (mood: MoodOptionTypeWithTimestamp) => void;
+};
 
 const defaultValue = {
   moodList: [],
   handleSelectMood: () => {},
+  handleDeleteMood: () => {},
 };
 
-const AppContext = createContext<AppContextType>(defaultValue);
+const AppContext = React.createContext<AppContextType>(defaultValue);
 
-export const AppProvider: React.FC<any> = ({ children }) => {
-  const [moodList, setMoodList] = useState<MoodOptionTypeWithTimestamp[]>([]);
+export const AppProvider: React.FC = ({ children }: any) => {
+  const [moodList, setMoodList] = React.useState<MoodOptionTypeWithTimestamp[]>(
+    [],
+  );
 
-  const handleSelectMood = useCallback((mood: MoodOptionType) => {
-    setMoodList((current: any) => {
+  const handleSelectMood = React.useCallback((mood: MoodOptionType) => {
+    setMoodList((current) => {
       const newValue = [...current, { mood, timestamp: Date.now() }];
       setAppData({ moods: newValue });
       return newValue;
     });
   }, []);
 
-  useEffect(() => {
+  const handleDeleteMood = React.useCallback(
+    (mood: MoodOptionTypeWithTimestamp) => {
+      setMoodList((current) => {
+        const newValue = current.filter(
+          (item) => item.timestamp !== mood.timestamp,
+        );
+        setAppData({ moods: newValue });
+        return newValue;
+      });
+    },
+    [],
+  );
+
+  React.useEffect(() => {
     const getDataFromStorage = async () => {
       const data = await getAppData();
 
-      if (data) setMoodList(data.moods);
+      if (data) {
+        setMoodList(data.moods);
+      }
     };
     getDataFromStorage();
   }, []);
 
   return (
-    <AppContext.Provider value={{ moodList, handleSelectMood }}>
+    <AppContext.Provider
+      value={{ moodList, handleSelectMood, handleDeleteMood }}>
       {children}
     </AppContext.Provider>
   );
 };
 
-export const useAppContext = () => useContext(AppContext);
+export const useAppContext = () => React.useContext(AppContext);
