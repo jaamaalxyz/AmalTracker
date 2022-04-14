@@ -29,51 +29,63 @@ const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
     }
   }, [onSelect, selectedMood]);
 
-  if (hasSelectedMood) {
-    return (
-      <View style={styles.container}>
-        <Image style={styles.image} source={butterflies} />
-        <Pressable
-          style={styles.button}
-          onPress={() => setHasSelectedMood(false)}>
-          <Text style={styles.buttonText}>Back</Text>
-        </Pressable>
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.moodList}>
-      <View style={styles.container}>
-        <Text style={styles.heading}>How are you right now?</Text>
-        <View style={styles.moodList}>
-          {moodOptions.map((option) => (
-            <View key={option.emoji}>
-              <Pressable
-                onPress={() => setSelectedMood(option)}
-                style={[
-                  styles.moodItem,
-                  option.emoji === selectedMood?.emoji
-                    ? styles.selectedMoodItem
-                    : undefined,
-                ]}>
-                <Text style={styles.moodText}>{option.emoji}</Text>
-              </Pressable>
-              <Text style={styles.descriptionText}>
-                {selectedMood?.emoji === option.emoji
-                  ? option.description
-                  : ' '}
-              </Text>
-            </View>
-          ))}
-        </View>
-        <Pressable style={styles.button} onPress={handleSelect}>
-          <Text style={styles.buttonText}>Choose</Text>
-        </Pressable>
-      </View>
-    </View>
+    <>
+      {hasSelectedMood ? (
+        <HasSelectedView setHasSelectedMood={setHasSelectedMood} />
+      ) : (
+        <MoodListView
+          setSelectedMood={setSelectedMood}
+          selectedMood={selectedMood}
+          handleSelect={handleSelect}
+        />
+      )}
+    </>
   );
 };
+
+const HasSelectedView: React.FC<any> = ({ setHasSelectedMood }) => (
+  <View style={styles.container}>
+    <Image style={styles.image} source={butterflies} />
+    <Pressable style={styles.button} onPress={() => setHasSelectedMood(false)}>
+      <Text style={styles.buttonText}>Back</Text>
+    </Pressable>
+  </View>
+);
+
+const MoodListView: React.FC<any> = ({
+  setSelectedMood,
+  selectedMood,
+  handleSelect,
+}) => (
+  <View style={styles.moodList}>
+    <View style={styles.container}>
+      <Text style={styles.heading}>How are you right now?</Text>
+      <View style={styles.moodList}>
+        {moodOptions.map((option) => (
+          <View key={option.emoji}>
+            <Pressable
+              onPress={() => setSelectedMood(option)}
+              style={[
+                styles.moodItem,
+                option.emoji === selectedMood?.emoji
+                  ? styles.selectedMoodItem
+                  : undefined,
+              ]}>
+              <Text style={styles.moodText}>{option.emoji}</Text>
+            </Pressable>
+            <Text style={styles.descriptionText}>
+              {selectedMood?.emoji === option.emoji ? option.description : ' '}
+            </Text>
+          </View>
+        ))}
+      </View>
+      <Pressable style={styles.button} onPress={handleSelect}>
+        <Text style={styles.buttonText}>Choose</Text>
+      </Pressable>
+    </View>
+  </View>
+);
 
 const styles = StyleSheet.create({
   moodList: {
@@ -98,7 +110,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     color: theme.colorPurple,
-    fontWeight: 'bold',
+    fontFamily: theme.fontFamilyBold,
     fontSize: 10,
     textAlign: 'center',
   },
@@ -114,24 +126,22 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: theme.fontFamilyBold,
     color: theme.colorWhite,
     letterSpacing: 1,
     textAlign: 'center',
-    marginBottom: 20,
   },
   button: {
     backgroundColor: theme.colorPurple,
     width: 150,
     borderRadius: 20,
-    marginTop: 20,
     alignSelf: 'center',
     padding: 10,
   },
   buttonText: {
     color: theme.colorWhite,
+    fontFamily: theme.fontFamilyBold,
     textAlign: 'center',
-    fontWeight: 'bold',
   },
   image: {
     alignSelf: 'center',
