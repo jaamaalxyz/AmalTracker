@@ -110,10 +110,12 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'space-between',
     height: 230,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: theme.colorWhite,
     letterSpacing: 1,
     textAlign: 'center',
     marginBottom: 20,
