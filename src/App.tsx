@@ -1,10 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import { AppProvider } from './App.provider';
 import BottomTabsNavigator from './screens/BottomTabs.navigator';
 
 const App: React.FC = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <AppProvider>
       <NavigationContainer>
