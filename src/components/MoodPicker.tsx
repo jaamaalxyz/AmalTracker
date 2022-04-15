@@ -1,5 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 import { theme } from '../theme';
 import { MoodOptionType } from '../types';
 
@@ -29,6 +33,14 @@ const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
     }
   }, [onSelect, selectedMood]);
 
+  const buttonStyle = useAnimatedStyle(
+    () => ({
+      opacity: selectedMood ? withTiming(1) : withTiming(0.5),
+      transform: [{ scale: selectedMood ? withTiming(1) : 0.8 }],
+    }),
+    [selectedMood],
+  );
+
   return (
     <>
       {hasSelectedMood ? (
@@ -38,6 +50,7 @@ const MoodPicker: React.FC<MoodPickerProps> = ({ onSelect }) => {
           setSelectedMood={setSelectedMood}
           selectedMood={selectedMood}
           handleSelect={handleSelect}
+          buttonStyle={buttonStyle}
         />
       )}
     </>
@@ -53,10 +66,13 @@ const HasSelectedView: React.FC<any> = ({ setHasSelectedMood }) => (
   </View>
 );
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 const MoodListView: React.FC<any> = ({
   setSelectedMood,
   selectedMood,
   handleSelect,
+  buttonStyle,
 }) => (
   <View style={styles.moodList}>
     <View style={styles.container}>
@@ -80,9 +96,11 @@ const MoodListView: React.FC<any> = ({
           </View>
         ))}
       </View>
-      <Pressable style={styles.button} onPress={handleSelect}>
+      <AnimatedPressable
+        style={[styles.button, buttonStyle]}
+        onPress={handleSelect}>
         <Text style={styles.buttonText}>Choose</Text>
-      </Pressable>
+      </AnimatedPressable>
     </View>
   </View>
 );
