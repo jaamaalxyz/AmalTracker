@@ -1,2 +1,2 @@
-# MoodTracker
-This is my second React Native practice project thought by Kadi Kraman on FrontendMasters
+# AmolTracker
+Amol Tracker is a todo list and personal progress tracking app. which reminds you to keep doing good deeds daily basis and keep track of them.
